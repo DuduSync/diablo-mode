@@ -3,3 +3,4 @@ build/
 *.jks
 keystore.jks
 .DS_Store
+*.idsig
