@@ -187,7 +187,7 @@ class MainActivity : Activity() {
             setOnClickListener { openGithub() }
         }, matchWrap(top = 18, bottom = 8))
         col.addView(TextView(this).apply {
-            text = "versão 1.2"
+            text = "versão 1.3"
             textSize = 10f
             setTextColor(Color.parseColor("#666670"))
             gravity = Gravity.CENTER
