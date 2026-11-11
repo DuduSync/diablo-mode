@@ -2,7 +2,7 @@
   <img src="logo-1536.png" alt="Diablo Mode" width="180">
 </p>
 
-<h1 align="center">Diablo Mode (Samsung)</h1>
+<h1 align="center">Diablo Mode (Snapdragon)</h1>
 
 <p align="center">
   <img src="https://img.shields.io/badge/licen%C3%A7a-MIT-FF3B30?style=flat-square" alt="Licença MIT"/>
@@ -14,11 +14,13 @@
   <a href="https://github.com/DuduSync/diablo-mode/releases"><img src="https://img.shields.io/github/downloads/DuduSync/diablo-mode/total?style=flat-square&color=FF3B30&label=downloads" alt="Downloads"/></a>
 </p>
 
-<p align="center">Trava CPU e GPU no clock máximo em Samsung Snapdragon, só com root.</p>
+<p align="center">Trava CPU e GPU no clock máximo em Snapdragon, só com root.</p>
 
-O app faz via software o que o "Diablo Mode" da RedMagic faz no hardware. Testado no Galaxy S25 Ultra
-(SM-S938B, Snapdragon 8 Elite for Galaxy, One UI 8.5 / Android 17). Funciona em Snapdragon. Exynos usa outros nós
-do kernel e não é suportado.
+O app faz via software o que o "Diablo Mode" da RedMagic faz no hardware. Feito para Snapdragon.
+Validado no Galaxy S25 Ultra (SM-S938B, Snapdragon 8 Elite for Galaxy, One UI 8.5 / Android 17).
+
+Os nós do sysfs variam por fabricante. Em outros Snapdragon o loop aplica o que existe e ignora o resto, então
+pode funcionar em parte. Se algum nó faltar no seu aparelho, abra uma issue com o modelo e o SoC.
 
 ## Baixar
 
