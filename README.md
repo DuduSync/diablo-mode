@@ -32,7 +32,7 @@ APK assinado, sem dependência de módulo. Só instalar e dar root.
 
 O app desliga a proteção térmica do aparelho. Sessões longas sem cooler esquentam o SoC e desgastam a
 bateria mais rápido. Antes de ativar, o app mostra um aviso de 5 segundos. Um watchdog devolve a proteção
-térmica quando a GPU passa de 88 °C, algum cluster de CPU passa de 92 °C ou a bateria passa de 46 °C.
+térmica quando a GPU passa de 84 °C, algum cluster de CPU passa de 88 °C ou a bateria passa de 45 °C.
 
 ## O que ele faz
 
@@ -45,27 +45,30 @@ mesma build serve para outros Snapdragon.
 
 | Cap | Interface |
 |---|---|
-| Battery Current Limit (GPU) | `/sys/class/kgsl/kgsl-3d0/bcl` |
 | Nível térmico da GPU | `.../thermal_pwrlevel` |
 | Teto da GPU | `.../devfreq/max_freq` |
 | Cap do kernel na CPU | `/sys/devices/system/cpu/cpufreq_limit/cpufreq_max_limit` |
 | Governor e teto da CPU | `policy0`, `policy6` |
 
-Os daemons `thermal-engine`, o HAL térmico da Samsung, o HAL de performance da Qualcomm e o FDE.AI
-(quando instalado) voltam sozinhos quando mortos. Por isso matar uma vez não resolve, e o loop é o que
-segura.
+O BCL (limite de corrente da bateria) fica ligado de propósito: é proteção elétrica, não cap de desempenho.
+
+O `thermal-engine` e o `perfmond` da Samsung voltam sozinhos quando mortos, e o FDE.AI reaplica os caps.
+Por isso matar uma vez não resolve: o loop reaplica o desbloqueio e pausa o `perfmond` com SIGSTOP enquanto
+o modo está ligado. O HAL térmico da Samsung fica de pé de propósito: o Banana Native chama
+`getThermalHeadroom()` na main thread e trava se o HAL sumir.
 
 ## Dois modos
 
 TURBO trava min = max no máximo do chip. A CPU e a GPU ficam no topo o tempo todo e esquentam mesmo parado.
 
 AUTO remove os caps e usa `schedutil`. A CPU e a GPU chegam no máximo sob carga e ficam frias quando o
-celular está parado.
+celular está parado. É o modo padrão.
 
 ## Desligar volta ao stock
 
 Ao desligar, o app mata o loop, devolve o governor `walt` da Samsung, restaura a faixa de frequência de
-fábrica, reinicia o `thermal-engine` e reativa o FDE.AI.
+fábrica, reinicia o `thermal-engine` e devolve o `perfmond`. O FDE.AI continua desligado; se quiser de
+volta, reative o pacote `com.android.system.optimizer`.
 
 ## Recursos
 

@@ -189,7 +189,7 @@ class MainActivity : Activity() {
             setOnClickListener { openGithub() }
         }, matchWrap(top = 18, bottom = 8))
         col.addView(TextView(this).apply {
-            text = "versão 1.5"
+            text = "versão 1.10"
             textSize = 10f
             setTextColor(Color.parseColor("#666670"))
             gravity = Gravity.CENTER
@@ -199,7 +199,7 @@ class MainActivity : Activity() {
         writeAsset("diablo_loop.sh", scriptFile, mapOf("__FLAG__" to flagFile.absolutePath, "__INTF__" to intFile.absolutePath, "__MODE__" to modeFile.absolutePath))
         writeAsset("status.sh", statusFile, emptyMap())
         if (!intFile.exists()) intFile.writeText("2")
-        if (!modeFile.exists()) modeFile.writeText("turbo")
+        if (!modeFile.exists()) modeFile.writeText("auto")
 
         loadCachedValues()
         refresh()
@@ -601,7 +601,7 @@ class MainActivity : Activity() {
         su("pkill -f banana_unlock/service.sh")
         try { flagFile.writeText("1") } catch (e: Exception) { log("erro flag: ${e.message}"); return }
         if (!intFile.exists()) intFile.writeText("2")
-        if (!modeFile.exists()) modeFile.writeText("turbo")
+        if (!modeFile.exists()) modeFile.writeText("auto")
         val sh = scriptFile.absolutePath
         su("chmod 755 $sh")
         su("setsid sh $sh </dev/null >/dev/null 2>&1 &")
@@ -620,12 +620,12 @@ class MainActivity : Activity() {
         su("echo 3072000 > $POL0/scaling_max_freq")
         su("echo 1017600 > $POL6/scaling_min_freq")
         su("echo 3513600 > $POL6/scaling_max_freq")
-        // religa thermal + FDE.AI (re-capam como stock)
+        // religa thermal; FDE.AI fica desligado de proposito (era o capador)
         su("setprop ctl.start thermal-engine")
         su("setprop ctl.start vendor.samsung.hardware.thermal-default")
-        su("pm enable --user 0 com.feravolt.fdeai.donate")
+        su("pkill -CONT perfmond")
         stockFile.delete()
-        log("   stock: walt, thermal on, FDE on")
+        log("   stock: walt, thermal on, FDE off")
         refresh()
     }
 

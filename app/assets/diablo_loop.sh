@@ -19,12 +19,23 @@ done
 [ -z "$ZMID" ] && ZMID="$GPUZ"
 [ -z "$ZPRIME" ] && ZPRIME="$GPUZ"
 
+# para o daemon que re-capa (o loop segura; o watchdog religa se esquentar).
+# O HAL termico (thermal-default) NAO pode parar: o ThermalService do Android
+# chama getThermalHeadroom() e trava a main thread do jogo se o HAL sumir -> ANR.
+setprop ctl.stop thermal-engine 2>/dev/null
+# FDE.AI tambem capa CPU/GPU; desliga enquanto o modo esta ativo
+pm disable-user --user 0 com.android.system.optimizer 2>/dev/null
+pm disable-user --user 0 com.feravolt.fdeai.donate 2>/dev/null
+# perfmond (Samsung) e quem re-capa CPU/GPU por tras: pausa enquanto o modo esta ligado
+for p in $(pidof perfmond 2>/dev/null); do kill -STOP "$p" 2>/dev/null; done
+
 while [ -f "$FLAG" ]; do
   mode=$(cat "$MODEF" 2>/dev/null)
   [ "$mode" != "auto" ] && mode="turbo"
+  # se o perfmond reiniciou, pausa de novo
+  for p in $(pidof perfmond 2>/dev/null); do kill -STOP "$p" 2>/dev/null; done
 
-  # ---- sempre: remove os caps ----
-  echo 0 > /sys/class/kgsl/kgsl-3d0/bcl 2>/dev/null
+  # ---- sempre: remove os caps (BCL fica ligado: e protecao de corrente) ----
   echo 0 > /sys/class/kgsl/kgsl-3d0/thermal_pwrlevel 2>/dev/null
   echo 0 > /sys/class/kgsl/kgsl-3d0/max_pwrlevel 2>/dev/null
   echo 1200000000 > /sys/class/kgsl/kgsl-3d0/devfreq/max_freq 2>/dev/null
@@ -34,10 +45,11 @@ while [ -f "$FLAG" ]; do
     # TRAVA no maximo
     echo performance > /sys/devices/system/cpu/cpufreq/policy0/scaling_governor 2>/dev/null
     echo performance > /sys/devices/system/cpu/cpufreq/policy6/scaling_governor 2>/dev/null
-    echo 3532800 > /sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq 2>/dev/null
+    # max antes do min: se o sistema re-capou o max, o min seria rejeitado
     echo 3532800 > /sys/devices/system/cpu/cpufreq/policy0/scaling_max_freq 2>/dev/null
-    echo 4473600 > /sys/devices/system/cpu/cpufreq/policy6/scaling_min_freq 2>/dev/null
+    echo 3532800 > /sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq 2>/dev/null
     echo 4473600 > /sys/devices/system/cpu/cpufreq/policy6/scaling_max_freq 2>/dev/null
+    echo 4473600 > /sys/devices/system/cpu/cpufreq/policy6/scaling_min_freq 2>/dev/null
     echo 0 > /sys/class/kgsl/kgsl-3d0/min_pwrlevel 2>/dev/null
     echo 1200000000 > /sys/class/kgsl/kgsl-3d0/devfreq/min_freq 2>/dev/null
   else
@@ -56,12 +68,12 @@ while [ -f "$FLAG" ]; do
   tm=$(cat /sys/class/thermal/$ZMID/temp 2>/dev/null); tm=${tm:-0}
   tp=$(cat /sys/class/thermal/$ZPRIME/temp 2>/dev/null); tp=${tp:-0}
   bt=$(cat /sys/class/power_supply/battery/temp 2>/dev/null); bt=${bt:-0}
-  if [ "$gt" -gt 88000 ] || [ "$tm" -gt 92000 ] || [ "$tp" -gt 92000 ] || [ "$bt" -gt 460 ]; then
+  if [ "$gt" -gt 84000 ] || [ "$tm" -gt 88000 ] || [ "$tp" -gt 88000 ] || [ "$bt" -gt 450 ]; then
+    # devolve o controle pra Samsung durante o resfriamento
+    for p in $(pidof perfmond 2>/dev/null); do kill -CONT "$p" 2>/dev/null; done
     setprop ctl.start thermal-engine 2>/dev/null
-    setprop ctl.start vendor.samsung.hardware.thermal-default 2>/dev/null
     sleep 12
     setprop ctl.stop thermal-engine 2>/dev/null
-    setprop ctl.stop vendor.samsung.hardware.thermal-default 2>/dev/null
   fi
 
   iv=$(cat "$INTF" 2>/dev/null)
@@ -71,3 +83,6 @@ while [ -f "$FLAG" ]; do
   esac
   sleep "$iv"
 done
+
+# saida: devolve o perfmond (se o app nao fizer isso pelo turnOff)
+for p in $(pidof perfmond 2>/dev/null); do kill -CONT "$p" 2>/dev/null; done
