@@ -8,6 +8,8 @@ import android.graphics.Color
 import android.graphics.Typeface
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.GradientDrawable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -187,7 +189,7 @@ class MainActivity : Activity() {
             setOnClickListener { openGithub() }
         }, matchWrap(top = 18, bottom = 8))
         col.addView(TextView(this).apply {
-            text = "versão 1.3"
+            text = "versão 1.5"
             textSize = 10f
             setTextColor(Color.parseColor("#666670"))
             gravity = Gravity.CENTER
@@ -370,8 +372,7 @@ class MainActivity : Activity() {
         midBig.text = ghz(c0c)
         barMid.fraction = frac(c0c, c0hw)
         barMid.barColor = heatColor(num(m["tmid"]))
-        midSub.text = "min ${ghz(c0m)}  ·  chip ${ghz(c0hw)}  ·  ${m["gov"] ?: "?"}"
-        if (eff0 < num(c0hw)) midSub.append("  ·  cap ${ghz(eff0.toString())}")
+        midSub.text = cpuSubLine(c0m, c0hw, eff0, m["gov"] ?: "?")
         midTemp.text = temp(m["tmid"])
         midTemp.setTextColor(heatColor(num(m["tmid"])))
 
@@ -382,8 +383,7 @@ class MainActivity : Activity() {
         primeBig.text = ghz(c6c)
         barPrime.fraction = frac(c6c, c6hw)
         barPrime.barColor = heatColor(num(m["tprime"]))
-        primeSub.text = "min ${ghz(c6m)}  ·  chip ${ghz(c6hw)}"
-        if (eff6 < num(c6hw)) primeSub.append("  ·  cap ${ghz(eff6.toString())}")
+        primeSub.text = cpuSubLine(c6m, c6hw, eff6, m["gov6"])
         primeTemp.text = temp(m["tprime"])
         primeTemp.setTextColor(heatColor(num(m["tprime"])))
 
@@ -394,7 +394,7 @@ class MainActivity : Activity() {
         val ghwMhz = (ghw.trim().toLongOrNull() ?: 0L) / 1_000_000L
         barGpu.fraction = if (ghwMhz > 0) (gc.trim().toLongOrNull() ?: 0L) / ghwMhz.toFloat() else 0f
         barGpu.barColor = heatColor(num(m["gt"]))
-        gpuSub.text = "min ${hzToMhz(gm)}  ·  chip ${hzToMhz(ghw)}"
+        gpuSub.text = gpuSubLine(gm, ghw, gx, m["ggov"])
         gpuTemp.text = temp(m["gt"])
         gpuTemp.setTextColor(heatColor(num(m["gt"])))
 
@@ -408,6 +408,14 @@ class MainActivity : Activity() {
     }
 
     // ---------------- formatting ----------------
+
+    private fun cpuSubLine(minKhz: String, hwKhz: String, eff: Long, gov: String?): CharSequence {
+        return "mín ${ghz(minKhz)}  ·  máx ${ghz(hwKhz)}" + (gov?.let { "  ·  $it" } ?: "")
+    }
+
+    private fun gpuSubLine(minHz: String, hwHz: String, effHz: String, gov: String?): CharSequence {
+        return "mín ${hzToMhz(minHz)}  ·  máx ${hzToMhz(hwHz)}" + (gov?.takeIf { it.isNotEmpty() }?.let { "  ·  $it" } ?: "")
+    }
 
     private fun num(s: String?): Long = s?.trim()?.toLongOrNull() ?: 0L
 

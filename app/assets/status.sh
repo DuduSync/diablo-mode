@@ -47,6 +47,8 @@ echo "c6x=$(cat $P6/scaling_max_freq 2>/dev/null)"
 echo "c6hw=$(cat $P6/cpuinfo_max_freq 2>/dev/null)"
 
 echo "gov=$(cat $P0/scaling_governor 2>/dev/null)"
+echo "gov6=$(cat $P6/scaling_governor 2>/dev/null)"
+echo "ggov=$(cat $K/devfreq/governor 2>/dev/null)"
 echo "kcap=$(cat $CL/cpufreq_max_limit 2>/dev/null)"
 echo "bt=$(cat /sys/class/power_supply/battery/temp 2>/dev/null)"
 echo "bc=$(cat /sys/class/power_supply/battery/capacity 2>/dev/null)"
