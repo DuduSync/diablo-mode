@@ -7,7 +7,7 @@
 <p align="center">Trava CPU e GPU no clock máximo em Samsung Snapdragon, só com root.</p>
 
 O app faz via software o que o "Diablo Mode" da RedMagic faz no hardware. Testado no Galaxy S25 Ultra
-(SM-S938B, Snapdragon 8 Elite, One UI 8.5 / Android 17). Funciona em Snapdragon. Exynos usa outros nós
+(SM-S938B, Snapdragon 8 Elite for Galaxy, One UI 8.5 / Android 17). Funciona em Snapdragon. Exynos usa outros nós
 do kernel e não é suportado.
 
 ## Aviso
@@ -97,7 +97,7 @@ Nada aqui toca no kernel, na imagem de boot ou em partição. Um reboot volta tu
 
 | Aparelho | SoC | Android | Resultado |
 |---|---|---|---|
-| Galaxy S25 Ultra (SM-S938B) | Snapdragon 8 Elite | 17 | CPU em 4.47/3.53 GHz e GPU em 1.2 GHz travadas, 60 fps no Ocarina of Time (Banana Native) |
+| Galaxy S25 Ultra (SM-S938B) | Snapdragon 8 Elite for Galaxy | 17 | CPU em 4.47/3.53 GHz e GPU em 1.2 GHz travadas, 60 fps no Ocarina of Time (Banana Native) |
 
 ## Licença
 
