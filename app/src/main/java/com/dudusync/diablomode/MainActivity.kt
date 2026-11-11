@@ -1,6 +1,8 @@
 package com.dudusync.diablomode
 
 import android.app.Activity
+import android.content.Intent
+import android.net.Uri
 import android.app.Dialog
 import android.graphics.Color
 import android.graphics.Typeface
@@ -172,6 +174,25 @@ class MainActivity : Activity() {
             typeface = Typeface.MONOSPACE
         }
         col.addView(logView)
+
+        // rodape: botao do GitHub
+        col.addView(TextView(this).apply {
+            text = "GitHub  ·  DuduSync/diablo-mode  ↗"
+            textSize = 13f
+            setTextColor(Color.parseColor("#FF6B60"))
+            typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+            gravity = Gravity.CENTER
+            setPadding(dp(16), dp(16), dp(16), dp(16))
+            background = rounded(Color.parseColor("#1C1214"), 18, Color.parseColor("#FF3B30"))
+            setOnClickListener { openGithub() }
+        }, matchWrap(top = 18, bottom = 8))
+        col.addView(TextView(this).apply {
+            text = "versão 1.2"
+            textSize = 10f
+            setTextColor(Color.parseColor("#666670"))
+            gravity = Gravity.CENTER
+            setPadding(0, 0, 0, dp(8))
+        })
 
         writeAsset("diablo_loop.sh", scriptFile, mapOf("__FLAG__" to flagFile.absolutePath, "__INTF__" to intFile.absolutePath, "__MODE__" to modeFile.absolutePath))
         writeAsset("status.sh", statusFile, emptyMap())
@@ -703,6 +724,12 @@ class MainActivity : Activity() {
             setTextColor(Color.parseColor("#666670"))
         })
         return card
+    }
+
+    private fun openGithub() {
+        try {
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/DuduSync/diablo-mode")))
+        } catch (_: Exception) {}
     }
 
     private fun log(s: String) {

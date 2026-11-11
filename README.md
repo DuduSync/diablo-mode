@@ -4,11 +4,27 @@
 
 <h1 align="center">Diablo Mode (Samsung)</h1>
 
+<p align="center">
+  <img src="https://img.shields.io/badge/licen%C3%A7a-MIT-FF3B30?style=flat-square" alt="Licença MIT"/>
+  <img src="https://img.shields.io/badge/Android-13%2B-FF9F0A?style=flat-square&logo=android&logoColor=white" alt="Android 13+"/>
+  <img src="https://img.shields.io/badge/Kotlin-7F52FF?style=flat-square&logo=kotlin&logoColor=white" alt="Kotlin"/>
+  <img src="https://img.shields.io/badge/root-KernelSU%20%2F%20Magisk-FF3B30?style=flat-square" alt="Root"/>
+  <img src="https://img.shields.io/github/v/release/DuduSync/diablo-mode?style=flat-square&color=FF3B30&label=release" alt="Release"/>
+  <a href="https://hits.sh/github.com/DuduSync/diablo-mode/"><img src="https://hits.sh/github.com/DuduSync/diablo-mode.svg?label=visualiza%C3%A7%C3%B5es&logo=github&color=FF9F0A&style=flat-square" alt="Visualizações"/></a>
+  <a href="https://github.com/DuduSync/diablo-mode/releases"><img src="https://img.shields.io/github/downloads/DuduSync/diablo-mode/total?style=flat-square&color=FF3B30&label=downloads" alt="Downloads"/></a>
+</p>
+
 <p align="center">Trava CPU e GPU no clock máximo em Samsung Snapdragon, só com root.</p>
 
 O app faz via software o que o "Diablo Mode" da RedMagic faz no hardware. Testado no Galaxy S25 Ultra
 (SM-S938B, Snapdragon 8 Elite for Galaxy, One UI 8.5 / Android 17). Funciona em Snapdragon. Exynos usa outros nós
 do kernel e não é suportado.
+
+## Baixar
+
+APK assinado, sem dependência de módulo. Só instalar e dar root.
+
+➡️ [**Diablo Mode v1.1, Releases**](https://github.com/DuduSync/diablo-mode/releases/latest)
 
 ## Aviso
 
