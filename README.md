@@ -18,17 +18,20 @@ térmica quando a GPU passa de 88 °C, algum cluster de CPU passa de 92 °C ou a
 
 ## O que ele faz
 
-Samsung e Qualcomm mantêm a CPU perto de 1.4 GHz e a GPU perto de 443 MHz mesmo com o chip frio. O app
-vence esses daemons com um loop em root que reaplica o desbloqueio a cada 0.5 a 6 segundos. O intervalo é
-configurável no app.
+Os daemons térmicos e de performance do sistema seguram a CPU e a GPU abaixo do máximo mesmo com o chip
+frio. Os valores do cap mudam de aparelho para aparelho. O app vence esses daemons com um loop em root que
+reaplica o desbloqueio a cada 0.5 a 6 segundos, intervalo configurável no app.
 
-| Cap | Interface | Valor liberado |
-|---|---|---|
-| Battery Current Limit (GPU) | `/sys/class/kgsl/kgsl-3d0/bcl` | `0` |
-| Nível térmico da GPU | `.../thermal_pwrlevel` | `0` |
-| Teto da GPU | `.../devfreq/max_freq` | `1200000000` (1.2 GHz) |
-| Cap do kernel na CPU | `/sys/devices/system/cpu/cpufreq_limit/cpufreq_max_limit` | `4473600` (4.47 GHz) |
-| Governor e teto da CPU | `policy0`, `policy6` | `performance` ou `schedutil`, frequência máxima |
+O loop descobre os limites no sysfs na primeira execução. Nenhuma frequência fica fixa no código, então a
+mesma build serve para outros Snapdragon.
+
+| Cap | Interface |
+|---|---|
+| Battery Current Limit (GPU) | `/sys/class/kgsl/kgsl-3d0/bcl` |
+| Nível térmico da GPU | `.../thermal_pwrlevel` |
+| Teto da GPU | `.../devfreq/max_freq` |
+| Cap do kernel na CPU | `/sys/devices/system/cpu/cpufreq_limit/cpufreq_max_limit` |
+| Governor e teto da CPU | `policy0`, `policy6` |
 
 Os daemons `thermal-engine`, o HAL térmico da Samsung, o HAL de performance da Qualcomm e o FDE.AI
 (quando instalado) voltam sozinhos quando mortos. Por isso matar uma vez não resolve, e o loop é o que
@@ -36,7 +39,7 @@ segura.
 
 ## Dois modos
 
-TURBO trava min = max no topo: CPU em 3.53/4.47 GHz e GPU em 1.2 GHz. Esquenta mesmo parado.
+TURBO trava min = max no máximo do chip. A CPU e a GPU ficam no topo o tempo todo e esquentam mesmo parado.
 
 AUTO remove os caps e usa `schedutil`. A CPU e a GPU chegam no máximo sob carga e ficam frias quando o
 celular está parado.
