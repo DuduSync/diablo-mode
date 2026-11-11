@@ -26,7 +26,7 @@ pode funcionar em parte. Se algum nó faltar no seu aparelho, abra uma issue com
 
 APK assinado, sem dependência de módulo. Só instalar e dar root.
 
-➡️ [**Diablo Mode v1.1, Releases**](https://github.com/DuduSync/diablo-mode/releases/latest)
+➡️ [**Baixar na aba Releases**](https://github.com/DuduSync/diablo-mode/releases/latest)
 
 ## Aviso
 
